@@ -9,7 +9,8 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { UserDtoInput, UserDtoUpdate } from './dto/input.dto';
+import { UserSaveDto } from './dto/save.dto';
+import { UserUpdateDto } from './dto/update.dto';
 import { UserService } from './user.service';
 
 @Controller({
@@ -22,20 +23,21 @@ export class UserController {
   @Get()
   @HttpCode(200)
   async list() {
-    return this.userService.list();
+    const users = await this.userService.list();
+    return users;
   }
 
   @Post()
   @HttpCode(201)
-  async create(@Body() body: UserDtoInput) {
-    const usuario = await this.userService.create(body);
+  async save(@Body() body: UserSaveDto) {
+    const usuario = await this.userService.save(body);
     return usuario;
   }
 
   @Put(':id')
   @HttpCode(200)
-  async update(@Param('id') id: string, @Body() body: UserDtoUpdate) {
-    return this.userService.update(id, body);
+  async update(@Param('id') id: string, @Body() body: UserUpdateDto) {
+    await this.userService.update(id, body);
   }
 
   @Delete(':id')

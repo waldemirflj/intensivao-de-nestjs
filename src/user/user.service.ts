@@ -4,8 +4,9 @@ import { v4 as uuid } from 'uuid';
 import { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
 
-import { UserDtoInput } from './dto/input.dto';
-import { UserDtoOutput } from './dto/output.dto';
+import { UserSaveDto } from './dto/save.dto';
+import { UserUpdateDto } from './dto/update.dto';
+import { UserOutputDto } from './dto/output.dto';
 
 @Injectable()
 export class UserService {
@@ -15,19 +16,19 @@ export class UserService {
     const users = await this.repository.list();
 
     const usersDto = users.map(
-      (user) => new UserDtoOutput(user.id, user.name, user.email),
+      (user) => new UserOutputDto(user.id, user.name, user.email),
     );
 
     return usersDto;
   }
 
-  async create(data: UserDtoInput) {
+  async save(data: UserSaveDto) {
     const payload: UserEntity = {
       ...data,
       id: uuid(),
     };
 
-    await this.repository.create(payload);
+    await this.repository.save(payload);
     return payload;
   }
 
@@ -35,14 +36,8 @@ export class UserService {
     return this.repository.getByEmail(email);
   }
 
-  async update(id: string, data: UserDtoInput) {
-    const user = await this.repository.update(id, data);
-
-    const userDto = [user].map(
-      (user) => new UserDtoOutput(user.id, user.name, user.email),
-    );
-
-    return userDto;
+  async update(id: string, data: UserUpdateDto) {
+    return this.repository.update(id, data);
   }
 
   async delete(id: string) {
