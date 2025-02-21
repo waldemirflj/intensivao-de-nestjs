@@ -8,6 +8,7 @@ import {
 
 import { ProductImageEntity } from './product.image.entity';
 import { ProductCharacteristicEntity } from './product.characteristic.entity';
+import { OrderItemEntity } from '../order/order.item.entity';
 
 @Entity({ name: 'products' })
 export class ProductEntity {
@@ -55,4 +56,11 @@ export class ProductEntity {
     },
   )
   characteristics: ProductCharacteristicEntity[];
+
+  @OneToMany(() => OrderItemEntity, (item) => item.product, {
+    eager: false,
+    cascade: true,
+    createForeignKeyConstraints: true,
+  })
+  items: OrderItemEntity[];
 }

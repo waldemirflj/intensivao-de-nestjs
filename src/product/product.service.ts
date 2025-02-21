@@ -22,13 +22,11 @@ export class ProductService {
   }
 
   async save(data: ProductSaveDto): Promise<ProductEntity> {
-    const payload: ProductEntity = {
-      ...data,
-      id: uuid(),
-    };
+    const product = new ProductEntity();
 
-    await this.repository.save(payload);
-    return payload;
+    Object.assign(product, data as ProductEntity);
+
+    return this.repository.save(product);
   }
 
   async update(id: string, data: ProductUpdateDto): Promise<void> {
