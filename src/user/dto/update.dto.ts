@@ -1,19 +1,5 @@
-import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 
-import { UserEntity } from '../user.entity';
-import { SingleEmailValidator } from 'src/utils/decorators/single-email.validator';
+import { UserSaveDto } from './save.dto';
 
-export class UserUpdateDto extends UserEntity {
-  @IsNotEmpty()
-  @IsOptional()
-  name: string;
-
-  @IsEmail()
-  @SingleEmailValidator({ message: 'Email already registered' })
-  @IsOptional()
-  email: string;
-
-  @MinLength(6)
-  @IsOptional()
-  password: string;
-}
+export class UserUpdateDto extends PartialType(UserSaveDto) {}

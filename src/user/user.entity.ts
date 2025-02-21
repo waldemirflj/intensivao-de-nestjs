@@ -3,7 +3,10 @@ import {
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { OrderEntity } from '../order/order.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -27,4 +30,11 @@ export class UserEntity {
 
   @CreateDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
+
+  @OneToMany(() => OrderEntity, (order) => order.user, {
+    eager: false,
+    cascade: true,
+    createForeignKeyConstraints: true,
+  })
+  orders: OrderEntity[];
 }
